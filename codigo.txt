@@ -1,0 +1,38 @@
+import cv2
+import numpy as np
+from sklearn.cluster import KMeans
+from PIL import Image
+
+# Inicializa la captura de video
+cap = cv2.VideoCapture(0)  # '0' es generalmente el índice de la cámara predeterminada
+
+try:
+    while True:
+        # Captura frame-por-frame
+        ret, frame = cap.read()
+        
+        # Si frame se capturó correctamente, ret es True
+        if not ret:
+            print("No se pudo capturar el video")
+            break
+
+        # Convertir el frame de BGR (que OpenCV usa) a RGB
+        frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+
+        imagen_pil = Image.fromarray(frame_rgb).resize((8, 8)).convert('L')
+        imagen_np = np.array(imagen_pil).flatten()
+        imagen_np = imagen_np / 255.0  # Normalizar si fue así en el entrenamiento
+
+        # Aplica tu modelo KMeans
+        cluster_pred = kmeans.predict([imagen_np])
+
+        # Muestra el frame procesado en la UI
+        cv2.imshow('Frame', frame)
+
+        # Presiona 'q' para salir del bucle
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+finally:
+    # Cuando todo esté hecho, libera la captura
+    cap.release()
+    cv2.destroyAllWindows()
